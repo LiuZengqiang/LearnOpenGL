@@ -1,4 +1,11 @@
 # Learn OpenGL core model.
+# 这其实不是标准readme，而是我的学习笔记
+
+使用git和github
+	先-新建项目->使用git bash新建git->在团队资源管理器中点击最上方第四个图标(一个插头)管理链接
+	->在最下方本地git存储库中添加新建的项目文件夹->双击新添加的git库->选择同步
+	->再选github，即可在github上新建一个库，之后在提交、推送(或者同步)即可将本地的项目文件夹上传到github上
+
 一个vao中可以又多个vbo(最多16个)
 例如:对于一个点，需要有position和color信息
 我们可以生成两个vbo(即两个buffer)，一个buffer中存position数据，
@@ -77,3 +84,17 @@ texture(sampler,texture_coordinate)是GLSL内的内建函数
 
 变换时的矩阵依旧按照从后往前运算。
 	
+坐标变换:
+局部坐标->(模型model变换)->世界坐标->(观察view变换)->
+观察空间坐标->(投影projection变换)->裁剪坐标->屏幕坐标(在glViewport中)
+“使用投影矩阵能将3D坐标投影(Project)到很容易映射到2D的标准化设备坐标系中”。
+
+Vclip = Mprojection*Mview*Mmodel*Vlocal;
+
+在vertexShader中定义model、view和projection三个uniform mat4变量
+	三者分别代表：局部坐标->世界坐标、世界坐标->视点坐标、视点坐标->裁剪坐标
+		(从裁剪到屏幕是自动转换的)。
+	gl_Positon = model*view*projection*aPos
+	在代码中声明、定义model、view和projection变换矩阵，传给uniform变量。
+	projection可以设置为平行投影或者透视投影
+
